@@ -1,0 +1,493 @@
+﻿<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Criador de Personagens & Titans</title>
+    <!-- HTML2Canvas para exportar como imagem -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Arial, sans-serif;
+        }
+
+        body {
+            background-color: #0f141d;
+            color: #e0e6ed;
+            display: flex;
+            justify-content: center;
+            padding: 30px 15px;
+        }
+
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            max-width: 1100px;
+            width: 100%;
+        }
+
+        .form-section, .preview-section {
+            flex: 1;
+            min-width: 320px;
+            background: #18202c;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+            border: 1px solid #2a374a;
+        }
+
+        h2 {
+            color: #00d2ff;
+            margin-bottom: 20px;
+            text-align: center;
+            letter-spacing: 1px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            font-size: 14px;
+            color: #a0aec0;
+        }
+
+        input[type="text"], input[type="date"], input[type="file"], select, textarea {
+            width: 100%;
+            padding: 10px;
+            background: #0f141d;
+            border: 1px solid #2a374a;
+            border-radius: 6px;
+            color: #fff;
+            font-size: 14px;
+        }
+
+        input[type="file"] {
+            cursor: pointer;
+        }
+
+        input[type="radio"] {
+            margin-right: 5px;
+        }
+
+        .radio-group {
+            display: flex;
+            gap: 15px;
+            margin-top: 5px;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+            margin-top: 10px;
+        }
+
+        .btn-sortear {
+            background: #1e293b;
+            color: #fff;
+            border: 1px solid #475569;
+        }
+
+        .btn-sortear:hover {
+            background: #334155;
+        }
+
+        .btn-sortear:disabled {
+            background: #4a5568;
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+
+        .btn-salvar {
+            background: #00d2ff;
+            color: #000;
+            font-size: 16px;
+        }
+
+        .btn-salvar:hover {
+            background: #33e0ff;
+        }
+
+        /* Estilo Crachá / Badge Futurista */
+        .badge-card {
+            width: 360px;
+            margin: 0 auto;
+            background: #e2e8f0;
+            color: #0f172a;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+            border: 2px solid #cbd5e1;
+            font-family: 'Courier New', Courier, monospace;
+            position: relative;
+        }
+
+        .badge-header {
+            background: #000000;
+            color: #ffffff;
+            padding: 15px;
+            text-align: center;
+            border-bottom: 4px solid #1e293b;
+            position: relative;
+        }
+
+        .badge-header h3 {
+            font-size: 18px;
+            font-family: Arial, sans-serif;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .badge-image-section {
+            padding: 15px;
+            background: #f1f5f9;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-bottom: 2px solid #cbd5e1;
+        }
+
+        .badge-image-box {
+            width: 110px;
+            height: 110px;
+            border: 2px solid #94a3b8;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            background: #e2e8f0;
+        }
+
+        .badge-image-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .badge-main-name {
+            padding: 10px 15px 5px 15px;
+            font-family: Arial, sans-serif;
+        }
+
+        .badge-main-name .label {
+            font-size: 11px;
+            color: #64748b;
+            text-transform: uppercase;
+            font-weight: bold;
+        }
+
+        .badge-main-name .val {
+            font-size: 22px;
+            font-weight: 900;
+            color: #0f172a;
+            text-transform: uppercase;
+            word-break: break-word;
+        }
+
+        .badge-details {
+            padding: 5px 15px 15px 15px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            font-size: 12px;
+        }
+
+        .badge-field {
+            display: flex;
+            flex-direction: column;
+            border-bottom: 1px solid #cbd5e1;
+            padding-bottom: 3px;
+        }
+
+        .badge-field.full-width {
+            grid-column: span 2;
+        }
+
+        .badge-field .f-label {
+            font-size: 10px;
+            color: #64748b;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .badge-field .f-val {
+            font-size: 13px;
+            font-weight: bold;
+            color: #1e293b;
+            word-break: break-word;
+        }
+
+        .badge-barcode {
+            background: #ffffff;
+            padding: 10px;
+            text-align: center;
+            border-top: 2px solid #cbd5e1;
+        }
+
+        .barcode-lines {
+            height: 35px;
+            background: repeating-linear-gradient(
+                90deg,
+                #000 0px,
+                #000 2px,
+                #fff 2px,
+                #fff 4px,
+                #000 4px,
+                #000 7px,
+                #fff 7px,
+                #fff 8px
+            );
+            width: 100%;
+            margin-bottom: 4px;
+        }
+
+        .barcode-text {
+            font-size: 10px;
+            letter-spacing: 2px;
+            color: #334155;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <!-- Formulário -->
+    <div class="form-section">
+        <h2>Criação de Personagem</h2>
+        
+        <div class="form-group">
+            <label>Nome:</label>
+            <input type="text" id="nome" placeholder="Digite o nome..." oninput="atualizarCartao()">
+        </div>
+
+        <div class="form-group">
+            <label>Imagem do Personagem (Arquivo):</label>
+            <input type="file" id="imagemArquivo" accept="image/*" onchange="carregarImagem(event)">
+        </div>
+
+        <div class="form-group">
+            <label>Data de Nascimento (Idade):</label>
+            <input type="date" id="dataNascimento" onchange="atualizarCartao()">
+        </div>
+
+        <div class="form-group">
+            <label>Sexo:</label>
+            <div class="radio-group">
+                <label><input type="radio" name="sexo" value="Masculino" checked onchange="atualizarCartao()"> Masculino</label>
+                <label><input type="radio" name="sexo" value="Feminino" onchange="atualizarCartao()"> Feminino</label>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>Clã:</label>
+            <select id="cla" onchange="atualizarCartao()">
+                <option value="New Machine *UE*">New Machine *UE*</option>
+                <option value="翡翠の巨人 *JP*">翡翠の巨人 *JP*</option>
+                <option value="죽음의 용 *KP*">죽음의 용 *KP*</option>
+                <option value="Boitatá *BR*">Boitatá *BR*</option>
+                <option value="Eiserner Bär *DE*">Eiserner Bär *DE*</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>Personalidade:</label>
+            <input type="text" id="personalidade" placeholder="Ex: Frio, estrategista..." oninput="atualizarCartao()">
+        </div>
+
+        <div class="form-group">
+            <label>Objetivo:</label>
+            <input type="text" id="objetivo" placeholder="Ex: Proteger sua cidade..." oninput="atualizarCartao()">
+        </div>
+
+        <div class="form-group">
+            <label>Lore / História:</label>
+            <textarea id="lore" rows="3" placeholder="Conte a história do personagem..." oninput="atualizarCartao()"></textarea>
+        </div>
+
+        <div class="form-group">
+            <button id="btnSortear" class="btn-sortear" onclick="sortearTitan()">🎲 Sortear Titan (Único)</button>
+        </div>
+
+        <button class="btn-salvar" onclick="salvarCartao()">📷 Salvar Cartão de Registro</button>
+    </div>
+
+    <!-- Pré-visualização do Cartão (Estilo ID Badge / Crachá) -->
+    <div class="preview-section">
+        <h2>Cartão de Registro</h2>
+        <div class="badge-card" id="cartao">
+            <div class="badge-header">
+                <h3>REGISTRO DE PILOTO</h3>
+            </div>
+            
+            <!-- ÁREA DA IMAGEM DO PERSONAGEM -->
+            <div class="badge-image-section">
+                <div class="badge-image-box" id="card-image-container">
+                    <svg width="45" height="45" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="12" cy="7" r="4"></circle>
+                    </svg>
+                </div>
+            </div>
+
+            <div class="badge-main-name">
+                <div class="label">NOME DO SUJEITO / NAME</div>
+                <div class="val" id="card-nome">---</div>
+            </div>
+
+            <div class="badge-details">
+                <div class="badge-field">
+                    <span class="f-label">IDADE / BIRTH:</span>
+                    <span class="f-val" id="card-idade">---</span>
+                </div>
+                <div class="badge-field">
+                    <span class="f-label">SEXO / GENDER:</span>
+                    <span class="f-val" id="card-sexo">Masculino</span>
+                </div>
+                <div class="badge-field full-width">
+                    <span class="f-label">CLÃ / CLAN:</span>
+                    <span class="f-val" id="card-cla">New Machine *UE*</span>
+                </div>
+                <div class="badge-field full-width">
+                    <span class="f-label">PERSONALIDADE / PERSONALITY:</span>
+                    <span class="f-val" id="card-personalidade">---</span>
+                </div>
+                <div class="badge-field full-width">
+                    <span class="f-label">OBJETIVO / OBJECTIVE:</span>
+                    <span class="f-val" id="card-objetivo">---</span>
+                </div>
+                <div class="badge-field full-width">
+                    <span class="f-label">TITAN ATRIBUÍDO:</span>
+                    <span class="f-val" id="card-titan" style="color: #dc2626;">Pendente (Sortear)</span>
+                </div>
+                <div class="badge-field full-width">
+                    <span class="f-label">LORE:</span>
+                    <span class="f-val" id="card-lore" style="font-size: 11px; font-weight: normal;">---</span>
+                </div>
+            </div>
+
+            <div class="badge-barcode">
+                <div class="barcode-lines"></div>
+                <div class="barcode-text">LAB-ID: <span id="card-id">8492</span>-TITAN-PROJECT</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Opções de Titans e pesos de probabilidade
+    const titans = [
+        { nome: "Titan Leve", peso: 25 },
+        { nome: "Titan Padrão", peso: 50 },
+        { nome: "Titan Pesado", peso: 25 },
+        { nome: "Titan Corredor", peso: 35 },
+        { nome: "Titan Atirador", peso: 20 },
+        { nome: "Titan Guardião", peso: 15 },
+        { nome: "Titan Voador", peso: 10 },
+        { nome: "Titan Atacante", peso: 20 }
+    ];
+
+    let titanSorteado = null;
+    let imagemBase64 = null;
+
+    function calcularIdade(dataNascimento) {
+        if (!dataNascimento) return "---";
+        const hoje = new Date();
+        const nasc = new Date(dataNascimento);
+        let idade = hoje.getFullYear() - nasc.getFullYear();
+        const m = hoje.getMonth() - nasc.getMonth();
+        if (m < 0 || (m === 0 && hoje.getDate() < nasc.getDate())) {
+            idade--;
+        }
+        return idade + " anos";
+    }
+
+    function carregarImagem(event) {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                imagemBase64 = e.target.result;
+                atualizarCartao();
+            }
+            reader.readAsDataURL(file);
+        }
+    }
+
+    function atualizarCartao() {
+        document.getElementById('card-nome').innerText = document.getElementById('nome').value || "---";
+        document.getElementById('card-idade').innerText = calcularIdade(document.getElementById('dataNascimento').value);
+        
+        const sexoVal = document.querySelector('input[name="sexo"]:checked').value;
+        document.getElementById('card-sexo').innerText = sexoVal;
+
+        const claVal = document.getElementById('cla').value;
+        document.getElementById('card-cla').innerText = claVal;
+
+        document.getElementById('card-personalidade').innerText = document.getElementById('personalidade').value || "---";
+        document.getElementById('card-objetivo').innerText = document.getElementById('objetivo').value || "---";
+        document.getElementById('card-lore').innerText = document.getElementById('lore').value || "---";
+        
+        // Atualiza a imagem do crachá se houver um arquivo carregado
+        const imageContainer = document.getElementById('card-image-container');
+        if (imagemBase64) {
+            imageContainer.innerHTML = `<img src="${imagemBase64}" alt="Personagem">`;
+        }
+
+        if (titanSorteado) {
+            document.getElementById('card-titan').innerText = titanSorteado;
+            document.getElementById('card-titan').style.color = "#16a34a";
+        }
+    }
+
+    function sortearTitan() {
+        if (titanSorteado !== null) return; // Garante que só pode ser feito 1 vez
+
+        let pesoTotal = titans.reduce((soma, item) => soma + item.peso, 0);
+        let random = Math.random() * pesoTotal;
+        
+        for (let item of titans) {
+            if (random < item.peso) {
+                titanSorteado = item.nome;
+                break;
+            }
+            random -= item.peso;
+        }
+        
+        // Desativa o botão após o sorteio
+        const btn = document.getElementById('btnSortear');
+        btn.disabled = true;
+        btn.innerText = "🎲 Titan Já Sorteado";
+
+        atualizarCartao();
+    }
+
+    function salvarCartao() {
+        const elementoCartao = document.getElementById('cartao');
+        
+        html2canvas(elementoCartao, { useCORS: true, scale: 2 }).then(canvas => {
+            const link = document.createElement('a');
+            link.download = `cartao_${document.getElementById('nome').value || 'personagem'}.png`;
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+        });
+    }
+
+    atualizarCartao();
+</script>
+
+</body>
+</html>
+
