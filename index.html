@@ -63,7 +63,7 @@
             </div>
             <div>
                 <h1 class="font-header text-2xl font-bold tracking-wider text-white">REGISTRO DE IDENTIDADE DO PERSONAGEM</h1>
-                <p class="text-xs text-gray-400">Sistema Oficial de Emissão de Ficha &bull; Versão 3.0</p>
+                <p class="text-xs text-gray-400">Sistema Oficial de Emissão de Ficha &bull; Versão 2.6</p>
             </div>
         </div>
         <div class="flex items-center space-x-3">
@@ -80,7 +80,6 @@
 
     <main class="max-w-7xl mx-auto px-4 sm:px-6 py-8 w-full grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
         
-        <!-- Form Section -->
         <section class="lg:col-span-6 bg-cardbg border border-gray-800 rounded-2xl p-6 shadow-xl space-y-6">
             <div class="border-b border-gray-800 pb-4">
                 <h2 class="font-header text-xl font-bold text-indigo-400 flex items-center space-x-2">
@@ -126,14 +125,11 @@
                 </div>
             </div>
 
-            <!-- Race & Gacha (Max 3 attempts) -->
+            <!-- Race & Gacha -->
             <div class="space-y-2 bg-gray-900/50 p-4 rounded-xl border border-gray-800">
                 <div class="flex items-center justify-between">
-                    <div>
-                        <label class="text-xs font-semibold text-gray-300 uppercase tracking-wide block">Raça do Personagem</label>
-                        <span id="race-attempts-left" class="text-xs text-indigo-400 font-medium">Tentativas restantes: 3 / 3</span>
-                    </div>
-                    <button id="btn-roll-race" onclick="rollRace()" class="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold rounded-lg shadow transition flex items-center space-x-1.5">
+                    <label class="text-xs font-semibold text-gray-300 uppercase tracking-wide">Raça do Personagem</label>
+                    <button onclick="rollRace()" class="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold rounded-lg shadow transition flex items-center space-x-1.5">
                         <i class="fa-solid fa-dice"></i>
                         <span>Sortear Raça</span>
                     </button>
@@ -206,15 +202,6 @@
                 </div>
             </div>
 
-            <!-- Lore / História do Personagem -->
-            <div class="space-y-1.5">
-                <label class="text-xs font-semibold text-gray-300 uppercase tracking-wide flex items-center justify-between">
-                    <span>Lore (História do Personagem)</span>
-                    <span class="text-[10px] text-gray-500">Exibido no verso/documento</span>
-                </label>
-                <textarea id="input-lore" rows="3" placeholder="Descreva brevemente a história, origens ou motivações do seu personagem..." oninput="updateRG()" class="w-full bg-gray-900 border border-gray-700 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-indigo-500 transition resize-none"></textarea>
-            </div>
-
             <!-- Proeminência System (5 attempts) -->
             <div class="space-y-3 bg-gray-900/50 p-4 rounded-xl border border-gray-800">
                 <div class="flex items-center justify-between">
@@ -252,7 +239,6 @@
 
         </section>
 
-        <!-- Preview Section -->
         <section class="lg:col-span-6 flex flex-col items-center justify-center sticky top-24">
             <div class="w-full flex items-center justify-between mb-3 px-2">
                 <h3 class="font-header text-sm font-semibold tracking-wider text-gray-400 uppercase flex items-center space-x-2">
@@ -262,13 +248,14 @@
                 <span class="text-xs text-indigo-400 font-mono-code bg-indigo-950/60 px-2.5 py-1 rounded border border-indigo-800/50">Pronto para Exportar</span>
             </div>
 
+            <!-- RG Card Container (Captured by html2canvas) -->
             <div id="rg-card" class="w-full max-w-lg bg-gradient-to-br from-slate-900 via-zinc-900 to-slate-950 border-2 border-indigo-500/40 rounded-3xl p-6 shadow-2xl relative overflow-hidden text-gray-100 font-sans">
                 <!-- Decorative background elements -->
                 <div class="absolute -right-16 -top-16 w-48 h-48 bg-indigo-600/10 rounded-full blur-3xl pointer-events-none"></div>
                 <div class="absolute -left-16 -bottom-16 w-48 h-48 bg-violet-600/10 rounded-full blur-3xl pointer-events-none"></div>
 
                 <!-- Document Header -->
-                <div class="flex items-center justify-between border-b border-indigo-500/30 pb-4 mb-4">
+                <div class="flex items-center justify-between border-b border-indigo-500/30 pb-4 mb-5">
                     <div class="flex items-center space-x-3">
                         <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-600 to-violet-500 flex items-center justify-center text-white shadow-lg shadow-indigo-600/40">
                             <i class="fa-solid fa-shield-halved text-lg"></i>
@@ -284,7 +271,7 @@
                 </div>
 
                 <!-- Main ID Body -->
-                <div class="grid grid-cols-12 gap-4 items-start">
+                <div class="grid grid-cols-12 gap-5 items-start">
                     <!-- Photo Column -->
                     <div class="col-span-4 flex flex-col items-center space-y-3">
                         <div class="w-28 h-36 bg-gray-800 border-2 border-indigo-500/40 rounded-2xl overflow-hidden shadow-inner flex items-center justify-center relative bg-cover bg-center" id="rg-photo-box">
@@ -292,81 +279,75 @@
                             <img id="rg-photo-img" src="" alt="" class="w-full h-full object-cover hidden">
                         </div>
                         <div class="w-full text-center bg-gray-900/80 border border-gray-800 rounded-lg py-1 px-2">
-                            <span class="text-[9px] text-gray-400 block uppercase font-semibold">Tipo Sanguíneo</span>
+                            <span class="text-[10px] text-gray-400 block uppercase font-semibold">Tipo Sanguíneo</span>
                             <span class="text-xs font-bold text-red-400 font-mono-code" id="view-sangue">O+</span>
                         </div>
                     </div>
 
                     <!-- Details Column -->
-                    <div class="col-span-8 space-y-2">
+                    <div class="col-span-8 space-y-3">
                         <div>
-                            <span class="text-[9px] text-gray-400 uppercase font-semibold tracking-wider">Nome Completo</span>
-                            <div class="text-sm font-bold text-white tracking-wide border-b border-gray-800 pb-0.5 break-words" id="view-nome">---</div>
+                            <span class="text-[10px] text-gray-400 uppercase font-semibold tracking-wider">Nome Completo</span>
+                            <div class="text-base font-bold text-white tracking-wide border-b border-gray-800 pb-0.5 truncate" id="view-nome">---</div>
                         </div>
 
-                        <div class="grid grid-cols-2 gap-2">
+                        <div class="grid grid-cols-2 gap-3">
                             <div>
-                                <span class="text-[9px] text-gray-400 uppercase font-semibold tracking-wider">Idade</span>
-                                <div class="text-xs font-medium text-gray-200 border-b border-gray-800 pb-0.5 break-words" id="view-idade">---</div>
+                                <span class="text-[10px] text-gray-400 uppercase font-semibold tracking-wider">Idade</span>
+                                <div class="text-sm font-medium text-gray-200 border-b border-gray-800 pb-0.5" id="view-idade">---</div>
                             </div>
                             <div>
-                                <span class="text-[9px] text-gray-400 uppercase font-semibold tracking-wider">Sexo</span>
-                                <div class="text-xs font-medium text-gray-200 border-b border-gray-800 pb-0.5 break-words" id="view-sexo">---</div>
-                            </div>
-                        </div>
-
-                        <div class="grid grid-cols-2 gap-2">
-                            <div>
-                                <span class="text-[9px] text-gray-400 uppercase font-semibold tracking-wider">Raça</span>
-                                <div class="text-xs font-semibold text-indigo-300 border-b border-gray-800 pb-0.5 break-words" id="view-raca">---</div>
-                            </div>
-                            <div>
-                                <span class="text-[9px] text-gray-400 uppercase font-semibold tracking-wider">Sexualidade</span>
-                                <div class="text-xs font-medium text-gray-200 border-b border-gray-800 pb-0.5 break-words" id="view-sexualidade">---</div>
+                                <span class="text-[10px] text-gray-400 uppercase font-semibold tracking-wider">Sexo</span>
+                                <div class="text-sm font-medium text-gray-200 border-b border-gray-800 pb-0.5" id="view-sexo">---</div>
                             </div>
                         </div>
 
-                        <div class="grid grid-cols-2 gap-2">
+                        <div class="grid grid-cols-2 gap-3">
                             <div>
-                                <span class="text-[9px] text-gray-400 uppercase font-semibold tracking-wider">Profissão</span>
-                                <div class="text-xs font-medium text-gray-200 border-b border-gray-800 pb-0.5 break-words" id="view-profissao">---</div>
+                                <span class="text-[10px] text-gray-400 uppercase font-semibold tracking-wider">Raça</span>
+                                <div class="text-sm font-semibold text-indigo-300 border-b border-gray-800 pb-0.5 truncate" id="view-raca">---</div>
                             </div>
                             <div>
-                                <span class="text-[9px] text-gray-400 uppercase font-semibold tracking-wider">Afiliado</span>
-                                <div class="text-xs font-medium text-gray-200 border-b border-gray-800 pb-0.5 break-words" id="view-afiliado">---</div>
+                                <span class="text-[10px] text-gray-400 uppercase font-semibold tracking-wider">Sexualidade</span>
+                                <div class="text-sm font-medium text-gray-200 border-b border-gray-800 pb-0.5 truncate" id="view-sexualidade">---</div>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-3">
+                            <div>
+                                <span class="text-[10px] text-gray-400 uppercase font-semibold tracking-wider">Profissão</span>
+                                <div class="text-sm font-medium text-gray-200 border-b border-gray-800 pb-0.5 truncate" id="view-profissao">---</div>
+                            </div>
+                            <div>
+                                <span class="text-[10px] text-gray-400 uppercase font-semibold tracking-wider">Afiliado</span>
+                                <div class="text-sm font-medium text-gray-200 border-b border-gray-800 pb-0.5 truncate" id="view-afiliado">---</div>
                             </div>
                         </div>
                     </div>
                 </div>
 
                 <!-- Secondary Info Bar (Habilidade & Proeminência) -->
-                <div class="grid grid-cols-2 gap-3 mt-3 pt-3 border-t border-indigo-500/20">
-                    <div class="bg-gray-900/60 p-2 rounded-xl border border-gray-800">
-                        <span class="text-[9px] text-gray-400 uppercase font-semibold block">Habilidade Principal</span>
-                        <span class="text-xs font-semibold text-white break-words block" id="view-habilidade">---</span>
+                <div class="grid grid-cols-2 gap-3 mt-4 pt-4 border-t border-indigo-500/20">
+                    <div class="bg-gray-900/60 p-2.5 rounded-xl border border-gray-800">
+                        <span class="text-[10px] text-gray-400 uppercase font-semibold block">Habilidade Principal</span>
+                        <span class="text-xs font-semibold text-white truncate block" id="view-habilidade">---</span>
                     </div>
-                    <div class="bg-gray-900/60 p-2 rounded-xl border border-gray-800">
-                        <span class="text-[9px] text-gray-400 uppercase font-semibold block">Proeminência</span>
-                        <span class="text-xs font-bold text-violet-400 uppercase break-words block" id="view-prominence">Nenhuma</span>
+                    <div class="bg-gray-900/60 p-2.5 rounded-xl border border-gray-800">
+                        <span class="text-[10px] text-gray-400 uppercase font-semibold block">Proeminência</span>
+                        <span class="text-xs font-bold text-violet-400 uppercase truncate block" id="view-prominence">Nenhuma</span>
                     </div>
-                </div>
-
-                <!-- Lore / História Section inside RG Card -->
-                <div class="mt-3 pt-3 border-t border-indigo-500/20 bg-gray-900/40 p-2.5 rounded-xl border border-gray-800/80">
-                    <span class="text-[9px] text-indigo-400 uppercase font-bold tracking-wider block mb-1">Lore / História</span>
-                    <p class="text-[11px] text-gray-300 italic whitespace-pre-wrap break-words leading-relaxed max-h-24 overflow-y-auto" id="view-lore">Nenhuma história registrada...</p>
                 </div>
 
                 <!-- Status Grid preview -->
-                <div class="mt-3 pt-3 border-t border-indigo-500/20">
-                    <span class="text-[9px] text-gray-400 uppercase font-semibold tracking-wider block mb-2">Atributos e Status</span>
+                <div class="mt-4 pt-3 border-t border-indigo-500/20">
+                    <span class="text-[10px] text-gray-400 uppercase font-semibold tracking-wider block mb-2">Atributos e Status</span>
                     <div class="grid grid-cols-5 gap-1.5" id="view-status-grid">
                         <!-- Filled dynamically -->
                     </div>
                 </div>
 
                 <!-- Footer stamp -->
-                <div class="mt-4 pt-2.5 border-t border-dashed border-gray-800 flex items-center justify-between text-[10px] text-gray-500 font-mono-code">
+                <div class="mt-5 pt-3 border-t border-dashed border-gray-800 flex items-center justify-between text-[10px] text-gray-500 font-mono-code">
                     <span>AUTENTICADO VIA SISTEMA FÓRMULA-RG</span>
                     <span id="view-date">03/10/2026</span>
                 </div>
@@ -398,7 +379,6 @@
         let statusPoints = {};
         let totalFreePoints = 50;
         let attemptsRemaining = 5;
-        let raceAttemptsRemaining = 3;
         let selectedProminenceVal = "";
         let currentPhotoData = "";
 
@@ -422,7 +402,7 @@
 
             attributes.forEach(attr => {
                 const isProm = (selectedProminenceVal === attr.id);
-                const bonusText = isProm ? ' <span class="text-[10px] text-violet-400 font-bold">(+50 Proeminência)</span>' : '';
+                const bonusText = isProm ? ' <span class="text-xs text-violet-400 font-bold">(+50 Proeminência)</span>' : '';
                 
                 const div = document.createElement('div');
                 div.className = "flex items-center justify-between bg-gray-900 border border-gray-800 rounded-xl p-2.5";
@@ -458,7 +438,7 @@
             document.getElementById('points-remaining').textContent = totalFreePoints;
         }
 
-        // Race Gacha System with exact probabilities and max 3 attempts
+        // Race Gacha System with specified probabilities
         const raceTable = [
             { name: "Humano", prob: 25 },
             { name: "Elfo", prob: 25 },
@@ -478,10 +458,7 @@
         ];
 
         function rollRace() {
-            if (raceAttemptsRemaining <= 0) return;
-            raceAttemptsRemaining--;
-            document.getElementById('race-attempts-left').textContent = `Tentativas restantes: ${raceAttemptsRemaining} / 3`;
-
+            // Calculate total weight
             let totalWeight = raceTable.reduce((sum, r) => sum + r.prob, 0);
             let randomNum = Math.random() * totalWeight;
             let currentSum = 0;
@@ -505,12 +482,6 @@
                 choiceContainer.classList.add('hidden');
                 inputRaca.value = chosen;
             }
-
-            if (raceAttemptsRemaining === 0) {
-                const btnRollRace = document.getElementById('btn-roll-race');
-                btnRollRace.disabled = true;
-                btnRollRace.classList.add('opacity-50', 'cursor-not-allowed');
-            }
             updateRG();
         }
 
@@ -522,50 +493,46 @@
         }
 
         // Prominence System (5 attempts)
-        const prominenceOptions = attributes.map(a => a.id);
-
         function rollProminence() {
             if (attemptsRemaining <= 0) return;
             attemptsRemaining--;
             document.getElementById('attempts-left').textContent = `Tentativas restantes: ${attemptsRemaining} / 5`;
 
-            // Shuffle and pick 5 random options
-            let shuffled = [...prominenceOptions].sort(() => 0.5 - Math.random());
-            let selectedFive = shuffled.slice(0, 5);
+            // Generate 3 or 5 random options from attributes list
+            let shuffled = [...attributes].sort(() => 0.5 - Math.random());
+            let drawnOptions = shuffled.slice(0, 3);
 
             const box = document.getElementById('prominence-options-box');
             box.innerHTML = '';
 
-            selectedFive.forEach(promId => {
-                const attrObj = attributes.find(a => a.id === promId);
+            drawnOptions.forEach(opt => {
                 const btn = document.createElement('button');
-                btn.type = 'button';
-                btn.className = "bg-gray-900 hover:bg-violet-950 border border-gray-700 hover:border-violet-500 rounded-lg p-2 text-xs font-semibold text-violet-300 transition flex flex-col items-center justify-center space-y-1 shadow";
-                btn.innerHTML = `<i class="fa-solid fa-wand-magic-sparkles text-violet-400"></i><span>${attrObj.name}</span>`;
-                btn.onclick = () => chooseProminence(promId, attrObj.name);
+                btn.className = "bg-gray-800 hover:bg-violet-900/60 border border-gray-700 hover:border-violet-500 rounded-lg p-2 text-center text-xs font-medium transition text-gray-200 flex flex-col items-center justify-center space-y-1";
+                btn.innerHTML = `<span class="capitalize font-bold text-violet-300">${opt.name}</span><span class="text-[10px] text-gray-400">Fixar Proeminência</span>`;
+                btn.onclick = () => chooseProminence(opt.id, opt.name);
                 box.appendChild(btn);
             });
 
             if (attemptsRemaining === 0) {
-                const btnRollProm = document.getElementById('btn-roll-prom');
-                btnRollProm.disabled = true;
-                btnRollProm.classList.add('opacity-50', 'cursor-not-allowed');
+                document.getElementById('btn-roll-prom').disabled = true;
+                document.getElementById('btn-roll-prom').classList.add('opacity-50', 'cursor-not-allowed');
             }
         }
 
         function chooseProminence(id, name) {
             selectedProminenceVal = id;
-            document.getElementById('input-prominence').value = id;
+            document.getElementById('input-prominence').value = name;
             document.getElementById('view-prominence').textContent = name;
 
+            // Clear options box and show selected badge
             const box = document.getElementById('prominence-options-box');
-            box.innerHTML = `<div class="text-xs text-violet-300 font-semibold col-span-5 py-2 text-center bg-violet-950/40 rounded-lg border border-violet-800"><i class="fa-solid fa-check mr-1"></i> Proeminência escolhida: <strong>${name}</strong> (+50 Status)</div>`;
+            box.innerHTML = `<div class="col-span-3 text-xs text-violet-400 font-semibold p-2 bg-violet-950/40 border border-violet-800 rounded-lg text-center"><i class="fa-solid fa-check mr-1"></i> Proeminência fixa selecionada: ${name} (+50 pts)</div>`;
 
             renderStatusInputs();
             updateRG();
         }
 
-        // Load Character Photo
+        // Photo loader
         function loadPhoto(event) {
             const file = event.target.files[0];
             if (file) {
@@ -573,49 +540,31 @@
                 reader.onload = function(e) {
                     currentPhotoData = e.target.result;
                     const img = document.getElementById('rg-photo-img');
+                    const placeholder = document.getElementById('rg-photo-placeholder');
                     img.src = currentPhotoData;
                     img.classList.remove('hidden');
-                    document.getElementById('rg-photo-placeholder').classList.add('hidden');
-                };
+                    placeholder.classList.add('hidden');
+                }
                 reader.readAsDataURL(file);
             }
         }
 
-        // Update RG Realtime Preview
+        // Update RG Preview Live
         function updateRG() {
-            const nome = document.getElementById('input-nome').value || '---';
-            const idade = document.getElementById('input-idade').value;
-            const idadeText = idade ? `${idade} anos` : '---';
+            const getVal = (id) => document.getElementById('input-' + id).value;
+
+            document.getElementById('view-nome').textContent = getVal('nome') || '---';
+            document.getElementById('view-idade').textContent = getVal('idade') ? getVal('idade') + ' anos' : '---';
             
-            const sexoEl = document.querySelector('input[name="sexo"]:checked');
-            const sexo = sexoEl ? sexoEl.value : '---';
+            const sexoSelected = document.querySelector('input[name="sexo"]:checked');
+            document.getElementById('view-sexo').textContent = sexoSelected ? sexoSelected.value : '---';
 
-            const sexualidade = document.getElementById('input-sexualidade').value || '---';
-            const raca = document.getElementById('input-raca').value || '---';
-            const sangue = document.getElementById('input-sangue').value || 'O+';
-            const profissao = document.getElementById('input-profissao').value || '---';
-            const afiliado = document.getElementById('input-afiliado').value || '---';
-            const habilidade = document.getElementById('input-habilidade').value || '---';
-            const lore = document.getElementById('input-lore').value.trim();
-
-            document.getElementById('view-nome').textContent = nome;
-            document.getElementById('view-idade').textContent = idadeText;
-            document.getElementById('view-sexo').textContent = sexo;
-            document.getElementById('view-sexualidade').textContent = sexualidade;
-            document.getElementById('view-raca').textContent = raca;
-            document.getElementById('view-sangue').textContent = sangue;
-            document.getElementById('view-profissao').textContent = profissao;
-            document.getElementById('view-afiliado').textContent = afiliado;
-            document.getElementById('view-habilidade').textContent = habilidade;
-            
-            const viewLore = document.getElementById('view-lore');
-            if (lore) {
-                viewLore.textContent = lore;
-            } else {
-                viewLore.textContent = "Nenhuma história registrada...";
-            }
-
-            updateRGStatusGrid();
+            document.getElementById('view-sexualidade').textContent = getVal('sexualidade') || '---';
+            document.getElementById('view-raca').textContent = getVal('raca') || '---';
+            document.getElementById('view-sangue').textContent = document.getElementById('input-sangue').value;
+            document.getElementById('view-profissao').textContent = getVal('profissao') || '---';
+            document.getElementById('view-afiliado').textContent = getVal('afiliado') || '---';
+            document.getElementById('view-habilidade').textContent = getVal('habilidade') || '---';
         }
 
         function updateRGStatusGrid() {
@@ -629,10 +578,10 @@
                 }
 
                 const div = document.createElement('div');
-                div.className = "bg-gray-900/80 border border-gray-800 rounded-lg p-1.5 text-center flex flex-col justify-between overflow-hidden";
+                div.className = "bg-gray-900/80 border border-gray-800 rounded-lg p-1.5 text-center";
                 div.innerHTML = `
-                    <span class="text-[9px] text-gray-400 uppercase block break-words leading-tight">${attr.name}</span>
-                    <span class="text-xs font-mono-code font-bold ${selectedProminenceVal === attr.id ? 'text-violet-400' : 'text-indigo-300'} mt-1">${totalVal}</span>
+                    <span class="text-[9px] text-gray-400 uppercase block truncate">${attr.name.substring(0,4)}</span>
+                    <span class="text-xs font-mono-code font-bold ${selectedProminenceVal === attr.id ? 'text-violet-400' : 'text-indigo-300'}">${totalVal}</span>
                 `;
                 grid.appendChild(div);
             });
@@ -647,7 +596,6 @@
             document.getElementById('input-profissao').value = '';
             document.getElementById('input-afiliado').value = '';
             document.getElementById('input-habilidade').value = '';
-            document.getElementById('input-lore').value = '';
             document.getElementById('input-foto').value = '';
             document.querySelectorAll('input[name="sexo"]').forEach(el => el.checked = false);
             
@@ -659,16 +607,9 @@
 
             totalFreePoints = 50;
             attemptsRemaining = 5;
-            raceAttemptsRemaining = 3;
             selectedProminenceVal = "";
             document.getElementById('input-prominence').value = '';
             document.getElementById('view-prominence').textContent = 'Nenhuma';
-            
-            const btnRollRace = document.getElementById('btn-roll-race');
-            btnRollRace.disabled = false;
-            btnRollRace.classList.remove('opacity-50', 'cursor-not-allowed');
-            document.getElementById('race-attempts-left').textContent = 'Tentativas restantes: 3 / 3';
-
             document.getElementById('btn-roll-prom').disabled = false;
             document.getElementById('btn-roll-prom').classList.remove('opacity-50', 'cursor-not-allowed');
             document.getElementById('attempts-left').textContent = 'Tentativas restantes: 5 / 5';
@@ -686,6 +627,7 @@
         function downloadRG() {
             const card = document.getElementById('rg-card');
             
+            // Temporary styling for high fidelity screenshot
             html2canvas(card, {
                 scale: 2,
                 useCORS: true,
