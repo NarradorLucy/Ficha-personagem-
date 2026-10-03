@@ -1,493 +1,646 @@
-﻿<!DOCTYPE html>
-<html lang="pt-BR">
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Criador de Personagens & Titans</title>
-    <!-- HTML2Canvas para exportar como imagem -->
+    <title>Registro Geral de Personagem - RPG ID</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        darkbg: '#0b0f19',
+                        cardbg: '#111827',
+                        accent: '#6366f1',
+                        accenthover: '#4f46e5',
+                        gold: '#d97706'
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Rajdhani:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- html2canvas for PNG export -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Segoe UI', Arial, sans-serif;
-        }
-
         body {
-            background-color: #0f141d;
-            color: #e0e6ed;
-            display: flex;
-            justify-content: center;
-            padding: 30px 15px;
+            font-family: 'Inter', sans-serif;
         }
-
-        .container {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 30px;
-            max-width: 1100px;
-            width: 100%;
+        .font-mono-code {
+            font-family: 'Share Tech Mono', monospace;
         }
-
-        .form-section, .preview-section {
-            flex: 1;
-            min-width: 320px;
-            background: #18202c;
-            padding: 25px;
-            border-radius: 12px;
-            box-shadow: 0 8px 24px rgba(0,0,0,0.5);
-            border: 1px solid #2a374a;
+        .font-header {
+            font-family: 'Rajdhani', sans-serif;
         }
-
-        h2 {
-            color: #00d2ff;
-            margin-bottom: 20px;
-            text-align: center;
-            letter-spacing: 1px;
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
         }
-
-        .form-group {
-            margin-bottom: 15px;
+        ::-webkit-scrollbar-track {
+            background: #0b0f19;
         }
-
-        label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: 600;
-            font-size: 14px;
-            color: #a0aec0;
+        ::-webkit-scrollbar-thumb {
+            background: #374151;
+            border-radius: 4px;
         }
-
-        input[type="text"], input[type="date"], input[type="file"], select, textarea {
-            width: 100%;
-            padding: 10px;
-            background: #0f141d;
-            border: 1px solid #2a374a;
-            border-radius: 6px;
-            color: #fff;
-            font-size: 14px;
-        }
-
-        input[type="file"] {
-            cursor: pointer;
-        }
-
-        input[type="radio"] {
-            margin-right: 5px;
-        }
-
-        .radio-group {
-            display: flex;
-            gap: 15px;
-            margin-top: 5px;
-        }
-
-        button {
-            width: 100%;
-            padding: 12px;
-            border: none;
-            border-radius: 6px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: 0.3s;
-            margin-top: 10px;
-        }
-
-        .btn-sortear {
-            background: #1e293b;
-            color: #fff;
-            border: 1px solid #475569;
-        }
-
-        .btn-sortear:hover {
-            background: #334155;
-        }
-
-        .btn-sortear:disabled {
-            background: #4a5568;
-            cursor: not-allowed;
-            opacity: 0.6;
-        }
-
-        .btn-salvar {
-            background: #00d2ff;
-            color: #000;
-            font-size: 16px;
-        }
-
-        .btn-salvar:hover {
-            background: #33e0ff;
-        }
-
-        /* Estilo Crachá / Badge Futurista */
-        .badge-card {
-            width: 360px;
-            margin: 0 auto;
-            background: #e2e8f0;
-            color: #0f172a;
-            border-radius: 16px;
-            overflow: hidden;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
-            border: 2px solid #cbd5e1;
-            font-family: 'Courier New', Courier, monospace;
-            position: relative;
-        }
-
-        .badge-header {
-            background: #000000;
-            color: #ffffff;
-            padding: 15px;
-            text-align: center;
-            border-bottom: 4px solid #1e293b;
-            position: relative;
-        }
-
-        .badge-header h3 {
-            font-size: 18px;
-            font-family: Arial, sans-serif;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-        }
-
-        .badge-image-section {
-            padding: 15px;
-            background: #f1f5f9;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            border-bottom: 2px solid #cbd5e1;
-        }
-
-        .badge-image-box {
-            width: 110px;
-            height: 110px;
-            border: 2px solid #94a3b8;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-            background: #e2e8f0;
-        }
-
-        .badge-image-box img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .badge-main-name {
-            padding: 10px 15px 5px 15px;
-            font-family: Arial, sans-serif;
-        }
-
-        .badge-main-name .label {
-            font-size: 11px;
-            color: #64748b;
-            text-transform: uppercase;
-            font-weight: bold;
-        }
-
-        .badge-main-name .val {
-            font-size: 22px;
-            font-weight: 900;
-            color: #0f172a;
-            text-transform: uppercase;
-            word-break: break-word;
-        }
-
-        .badge-details {
-            padding: 5px 15px 15px 15px;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-            font-size: 12px;
-        }
-
-        .badge-field {
-            display: flex;
-            flex-direction: column;
-            border-bottom: 1px solid #cbd5e1;
-            padding-bottom: 3px;
-        }
-
-        .badge-field.full-width {
-            grid-column: span 2;
-        }
-
-        .badge-field .f-label {
-            font-size: 10px;
-            color: #64748b;
-            font-weight: bold;
-            text-transform: uppercase;
-        }
-
-        .badge-field .f-val {
-            font-size: 13px;
-            font-weight: bold;
-            color: #1e293b;
-            word-break: break-word;
-        }
-
-        .badge-barcode {
-            background: #ffffff;
-            padding: 10px;
-            text-align: center;
-            border-top: 2px solid #cbd5e1;
-        }
-
-        .barcode-lines {
-            height: 35px;
-            background: repeating-linear-gradient(
-                90deg,
-                #000 0px,
-                #000 2px,
-                #fff 2px,
-                #fff 4px,
-                #000 4px,
-                #000 7px,
-                #fff 7px,
-                #fff 8px
-            );
-            width: 100%;
-            margin-bottom: 4px;
-        }
-
-        .barcode-text {
-            font-size: 10px;
-            letter-spacing: 2px;
-            color: #334155;
+        ::-webkit-scrollbar-thumb:hover {
+            background: #4b5563;
         }
     </style>
 </head>
-<body>
+<body class="bg-darkbg text-gray-100 min-h-screen flex flex-col justify-between selection:bg-indigo-500 selection:text-white">
 
-<div class="container">
-    <!-- Formulário -->
-    <div class="form-section">
-        <h2>Criação de Personagem</h2>
+    <header class="bg-cardbg/80 backdrop-blur-md border-b border-gray-800 sticky top-0 z-50 px-6 py-4 flex items-center justify-between shadow-lg">
+        <div class="flex items-center space-x-3">
+            <div class="bg-indigo-600 p-2.5 rounded-xl shadow-lg shadow-indigo-500/30 text-white">
+                <i class="fa-solid fa-id-card text-xl"></i>
+            </div>
+            <div>
+                <h1 class="font-header text-2xl font-bold tracking-wider text-white">REGISTRO DE IDENTIDADE DO PERSONAGEM</h1>
+                <p class="text-xs text-gray-400">Sistema Oficial de Emissão de Ficha &bull; Versão 2.6</p>
+            </div>
+        </div>
+        <div class="flex items-center space-x-3">
+            <button onclick="resetForm()" class="px-4 py-2 bg-gray-800 hover:bg-gray-700 text-gray-300 rounded-lg text-sm font-medium transition flex items-center space-x-2 border border-gray-700">
+                <i class="fa-solid fa-rotate-right"></i>
+                <span class="hidden sm:inline">Reiniciar</span>
+            </button>
+            <button onclick="downloadRG()" class="px-5 py-2.5 bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-500 hover:to-violet-500 text-white font-medium rounded-xl shadow-lg shadow-indigo-600/30 transition flex items-center space-x-2 transform active:scale-95">
+                <i class="fa-solid fa-download"></i>
+                <span>Salvar Ficha (PNG)</span>
+            </button>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 py-8 w-full grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
         
-        <div class="form-group">
-            <label>Nome:</label>
-            <input type="text" id="nome" placeholder="Digite o nome..." oninput="atualizarCartao()">
-        </div>
-
-        <div class="form-group">
-            <label>Imagem do Personagem (Arquivo):</label>
-            <input type="file" id="imagemArquivo" accept="image/*" onchange="carregarImagem(event)">
-        </div>
-
-        <div class="form-group">
-            <label>Data de Nascimento (Idade):</label>
-            <input type="date" id="dataNascimento" onchange="atualizarCartao()">
-        </div>
-
-        <div class="form-group">
-            <label>Sexo:</label>
-            <div class="radio-group">
-                <label><input type="radio" name="sexo" value="Masculino" checked onchange="atualizarCartao()"> Masculino</label>
-                <label><input type="radio" name="sexo" value="Feminino" onchange="atualizarCartao()"> Feminino</label>
+        <section class="lg:col-span-6 bg-cardbg border border-gray-800 rounded-2xl p-6 shadow-xl space-y-6">
+            <div class="border-b border-gray-800 pb-4">
+                <h2 class="font-header text-xl font-bold text-indigo-400 flex items-center space-x-2">
+                    <i class="fa-solid fa-pen-to-square"></i>
+                    <span>Dados do Cidadão / Aventureiro</span>
+                </h2>
+                <p class="text-xs text-gray-400 mt-1">Preencha os campos abaixo para gerar o seu documento de identificação oficial.</p>
             </div>
-        </div>
 
-        <div class="form-group">
-            <label>Clã:</label>
-            <select id="cla" onchange="atualizarCartao()">
-                <option value="New Machine *UE*">New Machine *UE*</option>
-                <option value="翡翠の巨人 *JP*">翡翠の巨人 *JP*</option>
-                <option value="죽음의 용 *KP*">죽음의 용 *KP*</option>
-                <option value="Boitatá *BR*">Boitatá *BR*</option>
-                <option value="Eiserner Bär *DE*">Eiserner Bär *DE*</option>
-            </select>
-        </div>
-
-        <div class="form-group">
-            <label>Personalidade:</label>
-            <input type="text" id="personalidade" placeholder="Ex: Frio, estrategista..." oninput="atualizarCartao()">
-        </div>
-
-        <div class="form-group">
-            <label>Objetivo:</label>
-            <input type="text" id="objetivo" placeholder="Ex: Proteger sua cidade..." oninput="atualizarCartao()">
-        </div>
-
-        <div class="form-group">
-            <label>Lore / História:</label>
-            <textarea id="lore" rows="3" placeholder="Conte a história do personagem..." oninput="atualizarCartao()"></textarea>
-        </div>
-
-        <div class="form-group">
-            <button id="btnSortear" class="btn-sortear" onclick="sortearTitan()">🎲 Sortear Titan (Único)</button>
-        </div>
-
-        <button class="btn-salvar" onclick="salvarCartao()">📷 Salvar Cartão de Registro</button>
-    </div>
-
-    <!-- Pré-visualização do Cartão (Estilo ID Badge / Crachá) -->
-    <div class="preview-section">
-        <h2>Cartão de Registro</h2>
-        <div class="badge-card" id="cartao">
-            <div class="badge-header">
-                <h3>REGISTRO DE PILOTO</h3>
-            </div>
-            
-            <!-- ÁREA DA IMAGEM DO PERSONAGEM -->
-            <div class="badge-image-section">
-                <div class="badge-image-box" id="card-image-container">
-                    <svg width="45" height="45" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                        <circle cx="12" cy="7" r="4"></circle>
-                    </svg>
+            <!-- Basic Information -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <!-- Nome -->
+                <div class="space-y-1.5">
+                    <label class="text-xs font-semibold text-gray-300 uppercase tracking-wide">Nome Completo</label>
+                    <input type="text" id="input-nome" placeholder="Ex: Arthur Pendragon" oninput="updateRG()" class="w-full bg-gray-900 border border-gray-700 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-indigo-500 transition">
+                </div>
+                <!-- Idade -->
+                <div class="space-y-1.5">
+                    <label class="text-xs font-semibold text-gray-300 uppercase tracking-wide">Idade</label>
+                    <input type="number" id="input-idade" placeholder="Ex: 24" min="0" oninput="updateRG()" class="w-full bg-gray-900 border border-gray-700 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-indigo-500 transition">
                 </div>
             </div>
 
-            <div class="badge-main-name">
-                <div class="label">NOME DO SUJEITO / NAME</div>
-                <div class="val" id="card-nome">---</div>
-            </div>
-
-            <div class="badge-details">
-                <div class="badge-field">
-                    <span class="f-label">IDADE / BIRTH:</span>
-                    <span class="f-val" id="card-idade">---</span>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <!-- Sexo -->
+                <div class="space-y-1.5">
+                    <label class="text-xs font-semibold text-gray-300 uppercase tracking-wide">Sexo</label>
+                    <div class="flex space-x-4 pt-1">
+                        <label class="flex items-center space-x-2 cursor-pointer bg-gray-900 border border-gray-700 px-4 py-2 rounded-xl flex-1 justify-center hover:border-indigo-500 transition">
+                            <input type="radio" name="sexo" value="M" onchange="updateRG()" class="text-indigo-600 focus:ring-indigo-500">
+                            <span class="text-sm font-medium">Masculino (M)</span>
+                        </label>
+                        <label class="flex items-center space-x-2 cursor-pointer bg-gray-900 border border-gray-700 px-4 py-2 rounded-xl flex-1 justify-center hover:border-indigo-500 transition">
+                            <input type="radio" name="sexo" value="F" onchange="updateRG()" class="text-indigo-600 focus:ring-indigo-500">
+                            <span class="text-sm font-medium">Feminino (F)</span>
+                        </label>
+                    </div>
                 </div>
-                <div class="badge-field">
-                    <span class="f-label">SEXO / GENDER:</span>
-                    <span class="f-val" id="card-sexo">Masculino</span>
-                </div>
-                <div class="badge-field full-width">
-                    <span class="f-label">CLÃ / CLAN:</span>
-                    <span class="f-val" id="card-cla">New Machine *UE*</span>
-                </div>
-                <div class="badge-field full-width">
-                    <span class="f-label">PERSONALIDADE / PERSONALITY:</span>
-                    <span class="f-val" id="card-personalidade">---</span>
-                </div>
-                <div class="badge-field full-width">
-                    <span class="f-label">OBJETIVO / OBJECTIVE:</span>
-                    <span class="f-val" id="card-objetivo">---</span>
-                </div>
-                <div class="badge-field full-width">
-                    <span class="f-label">TITAN ATRIBUÍDO:</span>
-                    <span class="f-val" id="card-titan" style="color: #dc2626;">Pendente (Sortear)</span>
-                </div>
-                <div class="badge-field full-width">
-                    <span class="f-label">LORE:</span>
-                    <span class="f-val" id="card-lore" style="font-size: 11px; font-weight: normal;">---</span>
+                <!-- Sexualidade -->
+                <div class="space-y-1.5">
+                    <label class="text-xs font-semibold text-gray-300 uppercase tracking-wide">Sexualidade</label>
+                    <input type="text" id="input-sexualidade" placeholder="Ex: Heterossexual, Pan..." oninput="updateRG()" class="w-full bg-gray-900 border border-gray-700 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-indigo-500 transition">
                 </div>
             </div>
 
-            <div class="badge-barcode">
-                <div class="barcode-lines"></div>
-                <div class="barcode-text">LAB-ID: <span id="card-id">8492</span>-TITAN-PROJECT</div>
+            <!-- Race & Gacha -->
+            <div class="space-y-2 bg-gray-900/50 p-4 rounded-xl border border-gray-800">
+                <div class="flex items-center justify-between">
+                    <label class="text-xs font-semibold text-gray-300 uppercase tracking-wide">Raça do Personagem</label>
+                    <button onclick="rollRace()" class="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold rounded-lg shadow transition flex items-center space-x-1.5">
+                        <i class="fa-solid fa-dice"></i>
+                        <span>Sortear Raça</span>
+                    </button>
+                </div>
+                <div class="flex items-center space-x-3">
+                    <input type="text" id="input-raca" readonly placeholder="Clique em 'Sortear Raça'..." class="w-full bg-gray-900 border border-gray-700 rounded-xl px-4 py-2.5 text-sm text-indigo-300 font-medium focus:outline-none">
+                </div>
+                <!-- Choice Container (if Escolha 0.01% hits) -->
+                <div id="choice-race-container" class="hidden mt-3 p-3 bg-indigo-950/40 border border-indigo-800 rounded-lg space-y-2">
+                    <p class="text-xs text-indigo-300 font-semibold"><i class="fa-solid fa-star text-yellow-400 mr-1"></i> Opção Rara "Escolha" obtida! Selecione sua raça livremente:</p>
+                    <select id="select-custom-race" onchange="selectCustomRace(this.value)" class="w-full bg-gray-900 border border-indigo-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none">
+                        <option value="">-- Selecione uma raça --</option>
+                        <option value="Humano">Humano</option>
+                        <option value="Elfo">Elfo</option>
+                        <option value="Anão">Anão</option>
+                        <option value="Feral">Feral</option>
+                        <option value="Ninfa">Ninfa</option>
+                        <option value="Dríada">Dríada</option>
+                        <option value="Vampiro">Vampiro</option>
+                        <option value="Oni">Oni</option>
+                        <option value="Ninfa de Sangue">Ninfa de Sangue</option>
+                        <option value="Elfo Negro">Elfo Negro</option>
+                        <option value="Humano Superior">Humano Superior</option>
+                        <option value="Vest">Vest</option>
+                        <option value="Noiz">Noiz</option>
+                        <option value="Sentian">Sentian</option>
+                    </select>
+                </div>
             </div>
-        </div>
-    </div>
-</div>
 
-<script>
-    // Opções de Titans e pesos de probabilidade
-    const titans = [
-        { nome: "Titan Leve", peso: 25 },
-        { nome: "Titan Padrão", peso: 50 },
-        { nome: "Titan Pesado", peso: 25 },
-        { nome: "Titan Corredor", peso: 35 },
-        { nome: "Titan Atirador", peso: 20 },
-        { nome: "Titan Guardião", peso: 15 },
-        { nome: "Titan Voador", peso: 10 },
-        { nome: "Titan Atacante", peso: 20 }
-    ];
+            <!-- Blood Type & Profession -->
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <!-- Tipo Sanguíneo -->
+                <div class="space-y-1.5">
+                    <label class="text-xs font-semibold text-gray-300 uppercase tracking-wide">Tipo Sanguíneo</label>
+                    <select id="input-sangue" onchange="updateRG()" class="w-full bg-gray-900 border border-gray-700 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:border-indigo-500 transition">
+                        <option value="A+">A+</option>
+                        <option value="A-">A-</option>
+                        <option value="B+">B+</option>
+                        <option value="B-">B-</option>
+                        <option value="AB+">AB+</option>
+                        <option value="AB-">AB-</option>
+                        <option value="O+">O+</option>
+                        <option value="O-">O-</option>
+                        <option value="Deturpado">Deturpado</option>
+                        <option value="HT">HT</option>
+                    </select>
+                </div>
+                <!-- Profissão -->
+                <div class="space-y-1.5">
+                    <label class="text-xs font-semibold text-gray-300 uppercase tracking-wide">Profissão</label>
+                    <input type="text" id="input-profissao" placeholder="Ex: Caçador" oninput="updateRG()" class="w-full bg-gray-900 border border-gray-700 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-indigo-500 transition">
+                </div>
+                <!-- Afiliado -->
+                <div class="space-y-1.5">
+                    <label class="text-xs font-semibold text-gray-300 uppercase tracking-wide">Afiliado</label>
+                    <input type="text" id="input-afiliado" placeholder="Ex: Guilda de Ouro" oninput="updateRG()" class="w-full bg-gray-900 border border-gray-700 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-indigo-500 transition">
+                </div>
+            </div>
 
-    let titanSorteado = null;
-    let imagemBase64 = null;
+            <!-- Habilidade & Foto -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div class="space-y-1.5">
+                    <label class="text-xs font-semibold text-gray-300 uppercase tracking-wide">Habilidade Principal</label>
+                    <input type="text" id="input-habilidade" placeholder="Ex: Lâmina Espectral" oninput="updateRG()" class="w-full bg-gray-900 border border-gray-700 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-indigo-500 transition">
+                </div>
+                <div class="space-y-1.5">
+                    <label class="text-xs font-semibold text-gray-300 uppercase tracking-wide">Foto do Personagem</label>
+                    <input type="file" id="input-foto" accept="image/*" onchange="loadPhoto(event)" class="w-full bg-gray-900 border border-gray-700 rounded-xl px-3 py-2 text-xs text-gray-400 file:mr-4 file:py-1 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-indigo-600 file:text-white hover:file:bg-indigo-500 transition cursor-pointer">
+                </div>
+            </div>
 
-    function calcularIdade(dataNascimento) {
-        if (!dataNascimento) return "---";
-        const hoje = new Date();
-        const nasc = new Date(dataNascimento);
-        let idade = hoje.getFullYear() - nasc.getFullYear();
-        const m = hoje.getMonth() - nasc.getMonth();
-        if (m < 0 || (m === 0 && hoje.getDate() < nasc.getDate())) {
-            idade--;
-        }
-        return idade + " anos";
-    }
+            <!-- Proeminência System (5 attempts) -->
+            <div class="space-y-3 bg-gray-900/50 p-4 rounded-xl border border-gray-800">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <label class="text-xs font-semibold text-gray-300 uppercase tracking-wide block">Proeminência (Sorteio 5 Tentativas)</label>
+                        <span id="attempts-left" class="text-xs text-indigo-400 font-medium">Tentativas restantes: 5 / 5</span>
+                    </div>
+                    <button id="btn-roll-prom" onclick="rollProminence()" class="px-3 py-1.5 bg-violet-600 hover:bg-violet-500 text-white text-xs font-semibold rounded-lg shadow transition flex items-center space-x-1.5">
+                        <i class="fa-solid fa-dice-three"></i>
+                        <span>Sortear 5 Opções</span>
+                    </button>
+                </div>
+                <div id="prominence-options-box" class="grid grid-cols-1 sm:grid-cols-5 gap-2 pt-1">
+                    <div class="text-xs text-gray-500 italic col-span-5 py-2 text-center bg-gray-900 rounded-lg border border-gray-800">
+                        Clique em "Sortear 5 Opções" para tentar sua sorte.
+                    </div>
+                </div>
+                <input type="hidden" id="input-prominence" value="">
+            </div>
 
-    function carregarImagem(event) {
-        const file = event.target.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                imagemBase64 = e.target.result;
-                atualizarCartao();
-            }
-            reader.readAsDataURL(file);
-        }
-    }
+            <!-- Status Distribution System -->
+            <div class="space-y-3 bg-gray-900/50 p-4 rounded-xl border border-gray-800">
+                <div class="flex items-center justify-between">
+                    <label class="text-xs font-semibold text-gray-300 uppercase tracking-wide">Distribuição de Status (50 pontos livres)</label>
+                    <div class="text-xs font-bold px-2.5 py-1 rounded-lg bg-indigo-950 text-indigo-300 border border-indigo-800">
+                        Restantes: <span id="points-remaining">50</span> pts
+                    </div>
+                </div>
+                <p class="text-xs text-gray-400">Distribua 50 pontos entre os 10 atributos. A proeminência escolhida garante +50 pontos automáticos no status correspondente.</p>
+                
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2" id="status-inputs-container">
+                    <!-- Status items generated dynamically via JS -->
+                </div>
+            </div>
 
-    function atualizarCartao() {
-        document.getElementById('card-nome').innerText = document.getElementById('nome').value || "---";
-        document.getElementById('card-idade').innerText = calcularIdade(document.getElementById('dataNascimento').value);
-        
-        const sexoVal = document.querySelector('input[name="sexo"]:checked').value;
-        document.getElementById('card-sexo').innerText = sexoVal;
+        </section>
 
-        const claVal = document.getElementById('cla').value;
-        document.getElementById('card-cla').innerText = claVal;
+        <section class="lg:col-span-6 flex flex-col items-center justify-center sticky top-24">
+            <div class="w-full flex items-center justify-between mb-3 px-2">
+                <h3 class="font-header text-sm font-semibold tracking-wider text-gray-400 uppercase flex items-center space-x-2">
+                    <i class="fa-solid fa-eye text-indigo-400"></i>
+                    <span>Pré-visualização do Documento RG</span>
+                </h3>
+                <span class="text-xs text-indigo-400 font-mono-code bg-indigo-950/60 px-2.5 py-1 rounded border border-indigo-800/50">Pronto para Exportar</span>
+            </div>
 
-        document.getElementById('card-personalidade').innerText = document.getElementById('personalidade').value || "---";
-        document.getElementById('card-objetivo').innerText = document.getElementById('objetivo').value || "---";
-        document.getElementById('card-lore').innerText = document.getElementById('lore').value || "---";
-        
-        // Atualiza a imagem do crachá se houver um arquivo carregado
-        const imageContainer = document.getElementById('card-image-container');
-        if (imagemBase64) {
-            imageContainer.innerHTML = `<img src="${imagemBase64}" alt="Personagem">`;
-        }
+            <!-- RG Card Container (Captured by html2canvas) -->
+            <div id="rg-card" class="w-full max-w-lg bg-gradient-to-br from-slate-900 via-zinc-900 to-slate-950 border-2 border-indigo-500/40 rounded-3xl p-6 shadow-2xl relative overflow-hidden text-gray-100 font-sans">
+                <!-- Decorative background elements -->
+                <div class="absolute -right-16 -top-16 w-48 h-48 bg-indigo-600/10 rounded-full blur-3xl pointer-events-none"></div>
+                <div class="absolute -left-16 -bottom-16 w-48 h-48 bg-violet-600/10 rounded-full blur-3xl pointer-events-none"></div>
 
-        if (titanSorteado) {
-            document.getElementById('card-titan').innerText = titanSorteado;
-            document.getElementById('card-titan').style.color = "#16a34a";
-        }
-    }
+                <!-- Document Header -->
+                <div class="flex items-center justify-between border-b border-indigo-500/30 pb-4 mb-5">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-600 to-violet-500 flex items-center justify-center text-white shadow-lg shadow-indigo-600/40">
+                            <i class="fa-solid fa-shield-halved text-lg"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-header text-sm font-bold tracking-widest text-indigo-400 uppercase">República dos Aventureiros</h4>
+                            <p class="text-[10px] text-gray-400 tracking-wider font-mono-code">REGISTRO GERAL DE IDENTIFICAÇÃO (RG)</p>
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <span class="inline-block px-2.5 py-1 bg-indigo-950 border border-indigo-700/50 rounded text-[10px] font-mono-code text-indigo-300 font-bold" id="rg-id-number">ID #8492-RPG</span>
+                    </div>
+                </div>
 
-    function sortearTitan() {
-        if (titanSorteado !== null) return; // Garante que só pode ser feito 1 vez
+                <!-- Main ID Body -->
+                <div class="grid grid-cols-12 gap-5 items-start">
+                    <!-- Photo Column -->
+                    <div class="col-span-4 flex flex-col items-center space-y-3">
+                        <div class="w-28 h-36 bg-gray-800 border-2 border-indigo-500/40 rounded-2xl overflow-hidden shadow-inner flex items-center justify-center relative bg-cover bg-center" id="rg-photo-box">
+                            <i class="fa-solid fa-user text-4xl text-gray-600" id="rg-photo-placeholder"></i>
+                            <img id="rg-photo-img" src="" alt="" class="w-full h-full object-cover hidden">
+                        </div>
+                        <div class="w-full text-center bg-gray-900/80 border border-gray-800 rounded-lg py-1 px-2">
+                            <span class="text-[10px] text-gray-400 block uppercase font-semibold">Tipo Sanguíneo</span>
+                            <span class="text-xs font-bold text-red-400 font-mono-code" id="view-sangue">O+</span>
+                        </div>
+                    </div>
 
-        let pesoTotal = titans.reduce((soma, item) => soma + item.peso, 0);
-        let random = Math.random() * pesoTotal;
-        
-        for (let item of titans) {
-            if (random < item.peso) {
-                titanSorteado = item.nome;
-                break;
-            }
-            random -= item.peso;
-        }
-        
-        // Desativa o botão após o sorteio
-        const btn = document.getElementById('btnSortear');
-        btn.disabled = true;
-        btn.innerText = "🎲 Titan Já Sorteado";
+                    <!-- Details Column -->
+                    <div class="col-span-8 space-y-3">
+                        <div>
+                            <span class="text-[10px] text-gray-400 uppercase font-semibold tracking-wider">Nome Completo</span>
+                            <div class="text-base font-bold text-white tracking-wide border-b border-gray-800 pb-0.5 truncate" id="view-nome">---</div>
+                        </div>
 
-        atualizarCartao();
-    }
+                        <div class="grid grid-cols-2 gap-3">
+                            <div>
+                                <span class="text-[10px] text-gray-400 uppercase font-semibold tracking-wider">Idade</span>
+                                <div class="text-sm font-medium text-gray-200 border-b border-gray-800 pb-0.5" id="view-idade">---</div>
+                            </div>
+                            <div>
+                                <span class="text-[10px] text-gray-400 uppercase font-semibold tracking-wider">Sexo</span>
+                                <div class="text-sm font-medium text-gray-200 border-b border-gray-800 pb-0.5" id="view-sexo">---</div>
+                            </div>
+                        </div>
 
-    function salvarCartao() {
-        const elementoCartao = document.getElementById('cartao');
-        
-        html2canvas(elementoCartao, { useCORS: true, scale: 2 }).then(canvas => {
-            const link = document.createElement('a');
-            link.download = `cartao_${document.getElementById('nome').value || 'personagem'}.png`;
-            link.href = canvas.toDataURL('image/png');
-            link.click();
+                        <div class="grid grid-cols-2 gap-3">
+                            <div>
+                                <span class="text-[10px] text-gray-400 uppercase font-semibold tracking-wider">Raça</span>
+                                <div class="text-sm font-semibold text-indigo-300 border-b border-gray-800 pb-0.5 truncate" id="view-raca">---</div>
+                            </div>
+                            <div>
+                                <span class="text-[10px] text-gray-400 uppercase font-semibold tracking-wider">Sexualidade</span>
+                                <div class="text-sm font-medium text-gray-200 border-b border-gray-800 pb-0.5 truncate" id="view-sexualidade">---</div>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-3">
+                            <div>
+                                <span class="text-[10px] text-gray-400 uppercase font-semibold tracking-wider">Profissão</span>
+                                <div class="text-sm font-medium text-gray-200 border-b border-gray-800 pb-0.5 truncate" id="view-profissao">---</div>
+                            </div>
+                            <div>
+                                <span class="text-[10px] text-gray-400 uppercase font-semibold tracking-wider">Afiliado</span>
+                                <div class="text-sm font-medium text-gray-200 border-b border-gray-800 pb-0.5 truncate" id="view-afiliado">---</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Secondary Info Bar (Habilidade & Proeminência) -->
+                <div class="grid grid-cols-2 gap-3 mt-4 pt-4 border-t border-indigo-500/20">
+                    <div class="bg-gray-900/60 p-2.5 rounded-xl border border-gray-800">
+                        <span class="text-[10px] text-gray-400 uppercase font-semibold block">Habilidade Principal</span>
+                        <span class="text-xs font-semibold text-white truncate block" id="view-habilidade">---</span>
+                    </div>
+                    <div class="bg-gray-900/60 p-2.5 rounded-xl border border-gray-800">
+                        <span class="text-[10px] text-gray-400 uppercase font-semibold block">Proeminência</span>
+                        <span class="text-xs font-bold text-violet-400 uppercase truncate block" id="view-prominence">Nenhuma</span>
+                    </div>
+                </div>
+
+                <!-- Status Grid preview -->
+                <div class="mt-4 pt-3 border-t border-indigo-500/20">
+                    <span class="text-[10px] text-gray-400 uppercase font-semibold tracking-wider block mb-2">Atributos e Status</span>
+                    <div class="grid grid-cols-5 gap-1.5" id="view-status-grid">
+                        <!-- Filled dynamically -->
+                    </div>
+                </div>
+
+                <!-- Footer stamp -->
+                <div class="mt-5 pt-3 border-t border-dashed border-gray-800 flex items-center justify-between text-[10px] text-gray-500 font-mono-code">
+                    <span>AUTENTICADO VIA SISTEMA FÓRMULA-RG</span>
+                    <span id="view-date">03/10/2026</span>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-cardbg border-t border-gray-800 py-4 px-6 text-center text-xs text-gray-500">
+        Gerador de Ficha RG RPG &bull; Criado com design moderno e suporte a exportação PNG.
+    </footer>
+
+    <script>
+        // List of all 10 attributes/status categories
+        const attributes = [
+            { id: 'magiaca', name: 'Mágica' },
+            { id: 'fisica', name: 'Física' },
+            { id: 'intelectual', name: 'Intelectual' },
+            { id: 'astral', name: 'Astral' },
+            { id: 'tecnologica', name: 'Tecnológica' },
+            { id: 'combate', name: 'Combate' },
+            { id: 'medicina', name: 'Medicina' },
+            { id: 'arte', name: 'Arte' },
+            { id: 'culinaria', name: 'Culinária' },
+            { id: 'sobrevivencialismo', name: 'Sobrevivencialismo' }
+        ];
+
+        // State variables
+        let statusPoints = {};
+        let totalFreePoints = 50;
+        let attemptsRemaining = 5;
+        let selectedProminenceVal = "";
+        let currentPhotoData = "";
+
+        // Initialize status points state
+        attributes.forEach(attr => {
+            statusPoints[attr.id] = 0;
         });
-    }
 
-    atualizarCartao();
-</script>
+        // Setup UI on load
+        window.onload = function() {
+            renderStatusInputs();
+            updateRG();
+            document.getElementById('view-date').textContent = new Date().toLocaleDateString('pt-BR');
+            document.getElementById('rg-id-number').textContent = 'ID #' + Math.floor(1000 + Math.random() * 9000) + '-RPG';
+        };
 
+        // Render Status inputs dynamically
+        function renderStatusInputs() {
+            const container = document.getElementById('status-inputs-container');
+            container.innerHTML = '';
+
+            attributes.forEach(attr => {
+                const isProm = (selectedProminenceVal === attr.id);
+                const bonusText = isProm ? ' <span class="text-xs text-violet-400 font-bold">(+50 Proeminência)</span>' : '';
+                
+                const div = document.createElement('div');
+                div.className = "flex items-center justify-between bg-gray-900 border border-gray-800 rounded-xl p-2.5";
+                div.innerHTML = `
+                    <div class="text-xs font-medium text-gray-300 capitalize">${attr.name}${bonusText}</div>
+                    <div class="flex items-center space-x-2">
+                        <button onclick="adjustStatus('${attr.id}', -1)" class="w-7 h-7 bg-gray-800 hover:bg-gray-700 text-gray-300 rounded-lg flex items-center justify-center font-bold text-sm transition">-</button>
+                        <span id="val-${attr.id}" class="w-6 text-center text-sm font-mono-code font-bold text-indigo-400">${statusPoints[attr.id]}</span>
+                        <button onclick="adjustStatus('${attr.id}', 1)" class="w-7 h-7 bg-gray-800 hover:bg-gray-700 text-gray-300 rounded-lg flex items-center justify-center font-bold text-sm transition">+</button>
+                    </div>
+                `;
+                container.appendChild(div);
+            });
+
+            updatePointsRemainingDisplay();
+            updateRGStatusGrid();
+        }
+
+        // Adjust status points
+        function adjustStatus(attrId, delta) {
+            const currentVal = statusPoints[attrId];
+            if (delta > 0 && totalFreePoints <= 0) return;
+            if (delta < 0 && currentVal <= 0) return;
+
+            statusPoints[attrId] += delta;
+            totalFreePoints -= delta;
+
+            renderStatusInputs();
+            updateRG();
+        }
+
+        function updatePointsRemainingDisplay() {
+            document.getElementById('points-remaining').textContent = totalFreePoints;
+        }
+
+        // Race Gacha System with specified probabilities
+        const raceTable = [
+            { name: "Humano", prob: 25 },
+            { name: "Elfo", prob: 25 },
+            { name: "Anão", prob: 25 },
+            { name: "Feral", prob: 25 },
+            { name: "Ninfa", prob: 20 },
+            { name: "Dríada", prob: 20 },
+            { name: "Vampiro", prob: 18 },
+            { name: "Oni", prob: 18 },
+            { name: "Ninfa de Sangue", prob: 15 },
+            { name: "Elfo Negro", prob: 15 },
+            { name: "Humano Superior", prob: 10 },
+            { name: "Vest", prob: 5 },
+            { name: "Noiz", prob: 3 },
+            { name: "Sentian", prob: 1 },
+            { name: "Escolha", prob: 0.01 }
+        ];
+
+        function rollRace() {
+            // Calculate total weight
+            let totalWeight = raceTable.reduce((sum, r) => sum + r.prob, 0);
+            let randomNum = Math.random() * totalWeight;
+            let currentSum = 0;
+            let chosen = raceTable[0].name;
+
+            for (let r of raceTable) {
+                currentSum += r.prob;
+                if (randomNum <= currentSum) {
+                    chosen = r.name;
+                    break;
+                }
+            }
+
+            const choiceContainer = document.getElementById('choice-race-container');
+            const inputRaca = document.getElementById('input-raca');
+
+            if (chosen === "Escolha") {
+                inputRaca.value = "Escolha (Selecione abaixo)";
+                choiceContainer.classList.remove('hidden');
+            } else {
+                choiceContainer.classList.add('hidden');
+                inputRaca.value = chosen;
+            }
+            updateRG();
+        }
+
+        function selectCustomRace(val) {
+            if (val) {
+                document.getElementById('input-raca').value = val;
+                updateRG();
+            }
+        }
+
+        // Prominence System (5 attempts)
+        function rollProminence() {
+            if (attemptsRemaining <= 0) return;
+            attemptsRemaining--;
+            document.getElementById('attempts-left').textContent = `Tentativas restantes: ${attemptsRemaining} / 5`;
+
+            // Generate 3 or 5 random options from attributes list
+            let shuffled = [...attributes].sort(() => 0.5 - Math.random());
+            let drawnOptions = shuffled.slice(0, 3);
+
+            const box = document.getElementById('prominence-options-box');
+            box.innerHTML = '';
+
+            drawnOptions.forEach(opt => {
+                const btn = document.createElement('button');
+                btn.className = "bg-gray-800 hover:bg-violet-900/60 border border-gray-700 hover:border-violet-500 rounded-lg p-2 text-center text-xs font-medium transition text-gray-200 flex flex-col items-center justify-center space-y-1";
+                btn.innerHTML = `<span class="capitalize font-bold text-violet-300">${opt.name}</span><span class="text-[10px] text-gray-400">Fixar Proeminência</span>`;
+                btn.onclick = () => chooseProminence(opt.id, opt.name);
+                box.appendChild(btn);
+            });
+
+            if (attemptsRemaining === 0) {
+                document.getElementById('btn-roll-prom').disabled = true;
+                document.getElementById('btn-roll-prom').classList.add('opacity-50', 'cursor-not-allowed');
+            }
+        }
+
+        function chooseProminence(id, name) {
+            selectedProminenceVal = id;
+            document.getElementById('input-prominence').value = name;
+            document.getElementById('view-prominence').textContent = name;
+
+            // Clear options box and show selected badge
+            const box = document.getElementById('prominence-options-box');
+            box.innerHTML = `<div class="col-span-3 text-xs text-violet-400 font-semibold p-2 bg-violet-950/40 border border-violet-800 rounded-lg text-center"><i class="fa-solid fa-check mr-1"></i> Proeminência fixa selecionada: ${name} (+50 pts)</div>`;
+
+            renderStatusInputs();
+            updateRG();
+        }
+
+        // Photo loader
+        function loadPhoto(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    currentPhotoData = e.target.result;
+                    const img = document.getElementById('rg-photo-img');
+                    const placeholder = document.getElementById('rg-photo-placeholder');
+                    img.src = currentPhotoData;
+                    img.classList.remove('hidden');
+                    placeholder.classList.add('hidden');
+                }
+                reader.readAsDataURL(file);
+            }
+        }
+
+        // Update RG Preview Live
+        function updateRG() {
+            const getVal = (id) => document.getElementById('input-' + id).value;
+
+            document.getElementById('view-nome').textContent = getVal('nome') || '---';
+            document.getElementById('view-idade').textContent = getVal('idade') ? getVal('idade') + ' anos' : '---';
+            
+            const sexoSelected = document.querySelector('input[name="sexo"]:checked');
+            document.getElementById('view-sexo').textContent = sexoSelected ? sexoSelected.value : '---';
+
+            document.getElementById('view-sexualidade').textContent = getVal('sexualidade') || '---';
+            document.getElementById('view-raca').textContent = getVal('raca') || '---';
+            document.getElementById('view-sangue').textContent = document.getElementById('input-sangue').value;
+            document.getElementById('view-profissao').textContent = getVal('profissao') || '---';
+            document.getElementById('view-afiliado').textContent = getVal('afiliado') || '---';
+            document.getElementById('view-habilidade').textContent = getVal('habilidade') || '---';
+        }
+
+        function updateRGStatusGrid() {
+            const grid = document.getElementById('view-status-grid');
+            grid.innerHTML = '';
+
+            attributes.forEach(attr => {
+                let totalVal = statusPoints[attr.id];
+                if (selectedProminenceVal === attr.id) {
+                    totalVal += 50; // Add 50 bonus points if prominence matches
+                }
+
+                const div = document.createElement('div');
+                div.className = "bg-gray-900/80 border border-gray-800 rounded-lg p-1.5 text-center";
+                div.innerHTML = `
+                    <span class="text-[9px] text-gray-400 uppercase block truncate">${attr.name.substring(0,4)}</span>
+                    <span class="text-xs font-mono-code font-bold ${selectedProminenceVal === attr.id ? 'text-violet-400' : 'text-indigo-300'}">${totalVal}</span>
+                `;
+                grid.appendChild(div);
+            });
+        }
+
+        // Reset Form
+        function resetForm() {
+            document.getElementById('input-nome').value = '';
+            document.getElementById('input-idade').value = '';
+            document.getElementById('input-sexualidade').value = '';
+            document.getElementById('input-raca').value = '';
+            document.getElementById('input-profissao').value = '';
+            document.getElementById('input-afiliado').value = '';
+            document.getElementById('input-habilidade').value = '';
+            document.getElementById('input-foto').value = '';
+            document.querySelectorAll('input[name="sexo"]').forEach(el => el.checked = false);
+            
+            currentPhotoData = "";
+            document.getElementById('rg-photo-img').src = '';
+            document.getElementById('rg-photo-img').classList.add('hidden');
+            document.getElementById('rg-photo-placeholder').classList.remove('hidden');
+            document.getElementById('choice-race-container').classList.add('hidden');
+
+            totalFreePoints = 50;
+            attemptsRemaining = 5;
+            selectedProminenceVal = "";
+            document.getElementById('input-prominence').value = '';
+            document.getElementById('view-prominence').textContent = 'Nenhuma';
+            document.getElementById('btn-roll-prom').disabled = false;
+            document.getElementById('btn-roll-prom').classList.remove('opacity-50', 'cursor-not-allowed');
+            document.getElementById('attempts-left').textContent = 'Tentativas restantes: 5 / 5';
+            document.getElementById('prominence-options-box').innerHTML = '<div class="text-xs text-gray-500 italic col-span-5 py-2 text-center bg-gray-900 rounded-lg border border-gray-800">Clique em "Sortear 5 Opções" para tentar sua sorte.</div>';
+
+            attributes.forEach(attr => {
+                statusPoints[attr.id] = 0;
+            });
+
+            renderStatusInputs();
+            updateRG();
+        }
+
+        // Download RG as PNG using html2canvas
+        function downloadRG() {
+            const card = document.getElementById('rg-card');
+            
+            // Temporary styling for high fidelity screenshot
+            html2canvas(card, {
+                scale: 2,
+                useCORS: true,
+                backgroundColor: '#0b0f19'
+            }).then(canvas => {
+                const link = document.createElement('a');
+                link.download = `RG_Personagem_${document.getElementById('input-nome').value || 'Aventureiro'}.png`;
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+            }).catch(err => {
+                console.error("Erro ao gerar imagem:", err);
+            });
+        }
+    </script>
 </body>
 </html>
-
