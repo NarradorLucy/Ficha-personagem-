@@ -128,8 +128,11 @@
             <!-- Race & Gacha -->
             <div class="space-y-2 bg-gray-900/50 p-4 rounded-xl border border-gray-800">
                 <div class="flex items-center justify-between">
-                    <label class="text-xs font-semibold text-gray-300 uppercase tracking-wide">Raça do Personagem</label>
-                    <button onclick="rollRace()" class="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold rounded-lg shadow transition flex items-center space-x-1.5">
+                    <div>
+                        <label class="text-xs font-semibold text-gray-300 uppercase tracking-wide block">Raça do Personagem</label>
+                        <span id="race-attempts-left" class="text-xs text-indigo-400 font-medium">Tentativas restantes: 3 / 3</span>
+                    </div>
+                    <button id="btn-roll-race" onclick="rollRace()" class="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold rounded-lg shadow transition flex items-center space-x-1.5">
                         <i class="fa-solid fa-dice"></i>
                         <span>Sortear Raça</span>
                     </button>
@@ -285,42 +288,42 @@
                     </div>
 
                     <!-- Details Column -->
-                    <div class="col-span-8 space-y-3">
+                    <div class="col-span-8 space-y-2.5">
                         <div>
                             <span class="text-[10px] text-gray-400 uppercase font-semibold tracking-wider">Nome Completo</span>
-                            <div class="text-base font-bold text-white tracking-wide border-b border-gray-800 pb-0.5 truncate" id="view-nome">---</div>
+                            <div class="text-base font-bold text-white tracking-wide border-b border-gray-800 pb-0.5 break-words" id="view-nome">---</div>
                         </div>
 
                         <div class="grid grid-cols-2 gap-3">
                             <div>
                                 <span class="text-[10px] text-gray-400 uppercase font-semibold tracking-wider">Idade</span>
-                                <div class="text-sm font-medium text-gray-200 border-b border-gray-800 pb-0.5" id="view-idade">---</div>
+                                <div class="text-sm font-medium text-gray-200 border-b border-gray-800 pb-0.5 break-words" id="view-idade">---</div>
                             </div>
                             <div>
                                 <span class="text-[10px] text-gray-400 uppercase font-semibold tracking-wider">Sexo</span>
-                                <div class="text-sm font-medium text-gray-200 border-b border-gray-800 pb-0.5" id="view-sexo">---</div>
+                                <div class="text-sm font-medium text-gray-200 border-b border-gray-800 pb-0.5 break-words" id="view-sexo">---</div>
                             </div>
                         </div>
 
                         <div class="grid grid-cols-2 gap-3">
                             <div>
                                 <span class="text-[10px] text-gray-400 uppercase font-semibold tracking-wider">Raça</span>
-                                <div class="text-sm font-semibold text-indigo-300 border-b border-gray-800 pb-0.5 truncate" id="view-raca">---</div>
+                                <div class="text-sm font-semibold text-indigo-300 border-b border-gray-800 pb-0.5 break-words" id="view-raca">---</div>
                             </div>
                             <div>
                                 <span class="text-[10px] text-gray-400 uppercase font-semibold tracking-wider">Sexualidade</span>
-                                <div class="text-sm font-medium text-gray-200 border-b border-gray-800 pb-0.5 truncate" id="view-sexualidade">---</div>
+                                <div class="text-sm font-medium text-gray-200 border-b border-gray-800 pb-0.5 break-words" id="view-sexualidade">---</div>
                             </div>
                         </div>
 
                         <div class="grid grid-cols-2 gap-3">
                             <div>
                                 <span class="text-[10px] text-gray-400 uppercase font-semibold tracking-wider">Profissão</span>
-                                <div class="text-sm font-medium text-gray-200 border-b border-gray-800 pb-0.5 truncate" id="view-profissao">---</div>
+                                <div class="text-sm font-medium text-gray-200 border-b border-gray-800 pb-0.5 break-words" id="view-profissao">---</div>
                             </div>
                             <div>
                                 <span class="text-[10px] text-gray-400 uppercase font-semibold tracking-wider">Afiliado</span>
-                                <div class="text-sm font-medium text-gray-200 border-b border-gray-800 pb-0.5 truncate" id="view-afiliado">---</div>
+                                <div class="text-sm font-medium text-gray-200 border-b border-gray-800 pb-0.5 break-words" id="view-afiliado">---</div>
                             </div>
                         </div>
                     </div>
@@ -330,11 +333,11 @@
                 <div class="grid grid-cols-2 gap-3 mt-4 pt-4 border-t border-indigo-500/20">
                     <div class="bg-gray-900/60 p-2.5 rounded-xl border border-gray-800">
                         <span class="text-[10px] text-gray-400 uppercase font-semibold block">Habilidade Principal</span>
-                        <span class="text-xs font-semibold text-white truncate block" id="view-habilidade">---</span>
+                        <span class="text-xs font-semibold text-white break-words block" id="view-habilidade">---</span>
                     </div>
                     <div class="bg-gray-900/60 p-2.5 rounded-xl border border-gray-800">
                         <span class="text-[10px] text-gray-400 uppercase font-semibold block">Proeminência</span>
-                        <span class="text-xs font-bold text-violet-400 uppercase truncate block" id="view-prominence">Nenhuma</span>
+                        <span class="text-xs font-bold text-violet-400 uppercase break-words block" id="view-prominence">Nenhuma</span>
                     </div>
                 </div>
 
@@ -379,6 +382,7 @@
         let statusPoints = {};
         let totalFreePoints = 50;
         let attemptsRemaining = 5;
+        let raceAttemptsRemaining = 3;
         let selectedProminenceVal = "";
         let currentPhotoData = "";
 
@@ -495,78 +499,72 @@
         // Prominence System (5 attempts)
         function rollProminence() {
             if (attemptsRemaining <= 0) return;
-            attemptsRemaining--;
-            document.getElementById('attempts-left').textContent = `Tentativas restantes: ${attemptsRemaining} / 5`;
+        // Race Gacha System with specified probabilities (max 3 attempts)
+        const raceTable = [
+            { name: "Humano", prob: 25 },
+            { name: "Elfo", prob: 25 },
+            { name: "Anão", prob: 25 },
+            { name: "Feral", prob: 25 },
+            { name: "Ninfa", prob: 20 },
+            { name: "Dríada", prob: 20 },
+            { name: "Vampiro", prob: 18 },
+            { name: "Oni", prob: 18 },
+            { name: "Ninfa de Sangue", prob: 15 },
+            { name: "Elfo Negro", prob: 15 },
+            { name: "Humano Superior", prob: 10 },
+            { name: "Vest", prob: 5 },
+            { name: "Noiz", prob: 3 },
+            { name: "Sentian", prob: 1 },
+            { name: "Escolha", prob: 0.01 }
+        ];
 
-            // Generate 3 or 5 random options from attributes list
-            let shuffled = [...attributes].sort(() => 0.5 - Math.random());
-            let drawnOptions = shuffled.slice(0, 3);
+        function rollRace() {
+            if (raceAttemptsRemaining <= 0) return;
+            raceAttemptsRemaining--;
+            document.getElementById('race-attempts-left').textContent = `Tentativas restantes: ${raceAttemptsRemaining} / 3`;
 
-            const box = document.getElementById('prominence-options-box');
-            box.innerHTML = '';
+            // Calculate total weight
+            let totalWeight = raceTable.reduce((sum, r) => sum + r.prob, 0);
+            let randomNum = Math.random() * totalWeight;
+            let currentSum = 0;
+            let chosen = raceTable[0].name;
 
-            drawnOptions.forEach(opt => {
-                const btn = document.createElement('button');
-                btn.className = "bg-gray-800 hover:bg-violet-900/60 border border-gray-700 hover:border-violet-500 rounded-lg p-2 text-center text-xs font-medium transition text-gray-200 flex flex-col items-center justify-center space-y-1";
-                btn.innerHTML = `<span class="capitalize font-bold text-violet-300">${opt.name}</span><span class="text-[10px] text-gray-400">Fixar Proeminência</span>`;
-                btn.onclick = () => chooseProminence(opt.id, opt.name);
-                box.appendChild(btn);
-            });
-
-            if (attemptsRemaining === 0) {
-                document.getElementById('btn-roll-prom').disabled = true;
-                document.getElementById('btn-roll-prom').classList.add('opacity-50', 'cursor-not-allowed');
+            for (let r of raceTable) {
+                currentSum += r.prob;
+                if (randomNum <= currentSum) {
+                    chosen = r.name;
+                    break;
+                }
             }
-        }
 
-        function chooseProminence(id, name) {
-            selectedProminenceVal = id;
-            document.getElementById('input-prominence').value = name;
-            document.getElementById('view-prominence').textContent = name;
+            const choiceContainer = document.getElementById('choice-race-container');
+            const inputRaca = document.getElementById('input-raca');
 
-            // Clear options box and show selected badge
-            const box = document.getElementById('prominence-options-box');
-            box.innerHTML = `<div class="col-span-3 text-xs text-violet-400 font-semibold p-2 bg-violet-950/40 border border-violet-800 rounded-lg text-center"><i class="fa-solid fa-check mr-1"></i> Proeminência fixa selecionada: ${name} (+50 pts)</div>`;
+            if (chosen === "Escolha") {
+                inputRaca.value = "Escolha (Selecione abaixo)";
+                choiceContainer.classList.remove('hidden');
+            } else {
+                choiceContainer.classList.add('hidden');
+                inputRaca.value = chosen;
+            }
 
-            renderStatusInputs();
+            if (raceAttemptsRemaining === 0) {
+                const btnRollRace = document.getElementById('btn-roll-race');
+                btnRollRace.disabled = true;
+                btnRollRace.classList.add('opacity-50', 'cursor-not-allowed');
+            }
             updateRG();
         }
 
-        // Photo loader
-        function loadPhoto(event) {
-            const file = event.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    currentPhotoData = e.target.result;
-                    const img = document.getElementById('rg-photo-img');
-                    const placeholder = document.getElementById('rg-photo-placeholder');
-                    img.src = currentPhotoData;
-                    img.classList.remove('hidden');
-                    placeholder.classList.add('hidden');
-                }
-                reader.readAsDataURL(file);
+        function selectCustomRace(val) {
+            if (val) {
+                document.getElementById('input-raca').value = val;
+                updateRG();
             }
         }
 
-        // Update RG Preview Live
-        function updateRG() {
-            const getVal = (id) => document.getElementById('input-' + id).value;
-
-            document.getElementById('view-nome').textContent = getVal('nome') || '---';
-            document.getElementById('view-idade').textContent = getVal('idade') ? getVal('idade') + ' anos' : '---';
-            
-            const sexoSelected = document.querySelector('input[name="sexo"]:checked');
-            document.getElementById('view-sexo').textContent = sexoSelected ? sexoSelected.value : '---';
-
-            document.getElementById('view-sexualidade').textContent = getVal('sexualidade') || '---';
-            document.getElementById('view-raca').textContent = getVal('raca') || '---';
-            document.getElementById('view-sangue').textContent = document.getElementById('input-sangue').value;
-            document.getElementById('view-profissao').textContent = getVal('profissao') || '---';
-            document.getElementById('view-afiliado').textContent = getVal('afiliado') || '---';
-            document.getElementById('view-habilidade').textContent = getVal('habilidade') || '---';
-        }
-
+        // Prominence System (5 attempts)
+<!-- ... existing5 attempts -->
         function updateRGStatusGrid() {
             const grid = document.getElementById('view-status-grid');
             grid.innerHTML = '';
@@ -578,10 +576,10 @@
                 }
 
                 const div = document.createElement('div');
-                div.className = "bg-gray-900/80 border border-gray-800 rounded-lg p-1.5 text-center";
+                div.className = "bg-gray-900/80 border border-gray-800 rounded-lg p-1.5 text-center flex flex-col justify-between overflow-hidden";
                 div.innerHTML = `
-                    <span class="text-[9px] text-gray-400 uppercase block truncate">${attr.name.substring(0,4)}</span>
-                    <span class="text-xs font-mono-code font-bold ${selectedProminenceVal === attr.id ? 'text-violet-400' : 'text-indigo-300'}">${totalVal}</span>
+                    <span class="text-[9px] text-gray-400 uppercase block break-words leading-tight">${attr.name}</span>
+                    <span class="text-xs font-mono-code font-bold ${selectedProminenceVal === attr.id ? 'text-violet-400' : 'text-indigo-300'} mt-1">${totalVal}</span>
                 `;
                 grid.appendChild(div);
             });
@@ -607,9 +605,16 @@
 
             totalFreePoints = 50;
             attemptsRemaining = 5;
+            raceAttemptsRemaining = 3;
             selectedProminenceVal = "";
             document.getElementById('input-prominence').value = '';
             document.getElementById('view-prominence').textContent = 'Nenhuma';
+            
+            const btnRollRace = document.getElementById('btn-roll-race');
+            btnRollRace.disabled = false;
+            btnRollRace.classList.remove('opacity-50', 'cursor-not-allowed');
+            document.getElementById('race-attempts-left').textContent = 'Tentativas restantes: 3 / 3';
+
             document.getElementById('btn-roll-prom').disabled = false;
             document.getElementById('btn-roll-prom').classList.remove('opacity-50', 'cursor-not-allowed');
             document.getElementById('attempts-left').textContent = 'Tentativas restantes: 5 / 5';
